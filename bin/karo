@@ -7,35 +7,21 @@ require 'karo.rb'
 class App
   include Methadone::Main
   include Methadone::CLILogging
+  include Methadone::SH
 
-  main do # Add args you want: |like,so|
-    # your program code here
-    # You can access CLI options via
-    # the options Hash
+  main do |from, to|
+    fixed_from = from.end_with?("/") ? from : from + "/"
+    fixed_to   = to.end_with?("/") ? to : to + "/"
+
+    sh "rsync -azv #{fixed_from} #{fixed_to}"
   end
 
-  # supplemental methods here
-
-  # Declare command-line interface here
-
-  # description "one line description of your app"
-  #
-  # Accept flags via:
-  # on("--flag VAL","Some flag")
-  # options[flag] will contain VAL
-  #
-  # Specify switches via:
-  # on("--[no-]switch","Some switch")
-  #
-  # Or, just call OptionParser methods on opts
-  #
-  # Require an argument
-  # arg :some_arg 
-  #
-  # # Make an argument optional
-  # arg :optional_arg, :optional
-
   version Karo::VERSION
+
+  description "Sync database or assets with remote servers"
+
+  arg :from, "sync from path"
+  arg :to, "sync to path"
 
   use_log_level_option
 

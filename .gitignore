@@ -4,3 +4,5 @@ pkg
 html
 tmp
 Gemfile.lock
+public
+.karo.yml

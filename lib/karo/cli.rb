@@ -1,4 +1,5 @@
 require 'karo/version'
+require 'karo/assets'
 require 'karo/config'
 require 'karo/cache'
 require 'thor'
@@ -17,7 +18,7 @@ module Karo
 	    configuration = Config.load_configuration(options)
 
 	    path = File.join(configuration["path"], "shared/log/#{options["environment"]}.log")
-	    ssh  = "ssh deploy@#{configuration["host"]}"
+	    ssh  = "ssh #{configuration["user"]}@#{configuration["host"]}"
 
 	    if name.eql?("")
 	    	cmd = "tail -f #{path}"
@@ -30,6 +31,9 @@ module Karo
 
     desc "cache [search, remove]", "find or clears a specific or all cache from shared/cache directory on the server"
     subcommand "cache", Cache
+
+    desc "assets [pull, push]", "syncs assets between server shared/system/dragonfly/<environment> directory and local system/dragonfly/development directory"
+    subcommand "assets", Assets
 
 	  desc "config", "displays server configuration stored in a config file"
 	  def config

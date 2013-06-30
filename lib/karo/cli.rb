@@ -37,14 +37,15 @@ module Karo
 
 	  def load_configuration(options)
 	  	begin
-	  		configuration = Config.load_configuration(options[:config_file])[options[:environment]]
+        config_file = File.expand_path(options[:config_file])
+	  		configuration = Config.load_configuration(config_file)[options[:environment]]
 		  	if configuration.nil? || configuration.empty?
 		  		raise Thor::Error, "Please pass a valid configuration for an environment '#{options[:environment]}'"
 		  	else
 		  		configuration
 		  	end
 		  rescue Karo::NoConfigFileFoundError
-		  	raise Thor::Error, "Please make sure if this configuration file exists? '#{options[:config_file]}'"
+		  	raise Thor::Error, "Please make sure if this configuration file exists? '#{config_file}'"
 		  end
 	  end
 

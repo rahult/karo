@@ -28,6 +28,11 @@ module Karo
 	    ap configuration if configuration
 	  end
 
+	  desc "version", "displays karo's current version"
+	  def version
+	  	puts Karo::VERSION
+	  end
+
 	  private
 
 	  def load_configuration(options)

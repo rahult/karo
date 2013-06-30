@@ -1,29 +1,21 @@
-# Karo
+# Getting Started [![Code Climate](https://codeclimate.com/github/rahult/karo.png)](https://codeclimate.com/github/rahult/karo) [![Dependency Status](https://gemnasium.com/rahult/karo.png)](https://gemnasium.com/rahult/karo) [![Gem Version](https://badge.fury.io/rb/karo.png)](http://badge.fury.io/rb/karo)
 
-TODO: Write a gem description
+**Karo** is an add on for ActiveRecord to give Rails 3 Models the abilities to access random records
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Karo is released as a Ruby Gem. The gem is to be installed within a Ruby
+on Rails application. To install, simply add the following to your Gemfile:
 
-    gem 'karo'
+```ruby
+# Gemfile
+gem 'karo'
+```
 
-And then execute:
+After updating your bundle, you can use Karo function from the command line
 
-    $ bundle
+## Usage (Commandline)
 
-Or install it yourself as:
-
-    $ gem install karo
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+```bash
+karo help                                   
+```

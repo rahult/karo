@@ -13,17 +13,22 @@ module Karo
 	  class_option :environment, aliases: "-e", desc: "server environment", default: "production"
 
 	  desc "log", "displays server log for a given environment"
-	  def log
+	  def log(name="")
 	    configuration = Config.load_configuration(options)
 
 	    path = File.join(configuration["path"], "shared/log/#{options["environment"]}.log")
 	    ssh  = "ssh deploy@#{configuration["host"]}"
-	    cmd  = "tail -f #{path}"
+
+	    if name.eql?("")
+	    	cmd = "tail -f #{path}"
+	    else
+	    	cmd = "tail #{path} | grep -A 10 -B 10 #{name}"
+	    end
 
 	    system "#{ssh} '#{cmd}'"
 	  end
 
-    desc "cache [find clear]", "find or clears a specific or all cache from shared/cache directory on the server"
+    desc "cache [search, remove]", "find or clears a specific or all cache from shared/cache directory on the server"
     subcommand "cache", Cache
 
 	  desc "config", "displays server configuration stored in a config file"

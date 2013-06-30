@@ -5,4 +5,5 @@ html
 tmp
 Gemfile.lock
 public
+config
 .karo.yml

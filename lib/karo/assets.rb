@@ -21,7 +21,7 @@ module Karo
 
       system "#{cmd}"
 
-      say "Sync complete", :green
+      say "Assets sync complete", :green
 	  end
 
     desc "push", "syncs assets from system/dragonfly/development directory into local server shared/system/dragonfly/<environment> directory"
@@ -43,9 +43,9 @@ module Karo
       if yes?("Are you sure?", :yellow)
         system "#{cmd_1}"
         system "#{cmd_2}"
-        say "Sync complete", :green
+        say "Assets sync complete", :green
       else
-        say "Sync cancelled", :yellow
+        say "Assets sync cancelled", :yellow
       end
 	  end
 

@@ -1,7 +1,8 @@
 require 'karo/version'
-require 'karo/assets'
 require 'karo/config'
+require 'karo/assets'
 require 'karo/cache'
+require 'karo/db'
 require 'thor'
 require 'ap'
 
@@ -34,6 +35,9 @@ module Karo
 
     desc "assets [pull, push]", "syncs assets between server shared/system/dragonfly/<environment> directory and local system/dragonfly/development directory"
     subcommand "assets", Assets
+
+    desc "db [pull, push]", "syncs MySQL database between server and localhost"
+    subcommand "db", DB
 
 	  desc "config", "displays server configuration stored in a config file"
 	  def config

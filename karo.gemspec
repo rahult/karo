@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Karo::VERSION
   spec.authors       = ["Rahul Trikha"]
   spec.email         = ["rahul.trikha@gmail.com"]
-  spec.description   = "Sync database or assets with remote servers"
-  spec.summary       = "Sync database or assets with remote servers"
-  spec.homepage      = ""
+  spec.description   = "SSH toolbox to make running logs, sync, cache commands easier for a given rails app"
+  spec.summary       = spec.description
+  spec.homepage      = "http://rahult.github.io/karo/"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -24,5 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency  "rdoc"
   spec.add_development_dependency  "aruba"
   spec.add_development_dependency  "rake", "~> 0.9.2"
-  spec.add_dependency "escort", "~> 0.4.0"
+  spec.add_dependency "awesome_print"
+  spec.add_dependency "thor"
 end

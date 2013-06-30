@@ -1,0 +1,3 @@
+production:
+  host: koiproduction.engineyard.katalyst.com.au
+  path: /data/gim

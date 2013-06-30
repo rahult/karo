@@ -1,51 +1,11 @@
 #!/usr/bin/env ruby
 
-require 'escort'
-require 'pry'
-require 'karo.rb'
+require 'karo'
 
-Escort::App.create do |app|
-  app.config_file ".karo", autocreate: false
-
-  app.version Karo::VERSION
-  app.summary "Sync database or assets with remote servers"
-
-  app.options do |opts|
-    opts.opt :environment, "Environment", short: '-e',
-             long: '--environment', type: :string,
-             default: "production"
-  end
-
-  app.command :start do |command|
-    command.summary "Start process"
-    command.description "Start process"
-
-    command.options do |opts|
-      opts.opt :reload, "Reload", short: '-r',
-               long: '--reload', type: :flag
-    end
-
-    command.action do |options, arguments|
-      binding.pry
-      puts "hello start"
-    end
-  end
-
-  app.command :stop do |command|
-    command.summary "Stop process"
-    command.description "Stop process"
-
-    command.action do |options, arguments|
-      puts "hello stop"
-    end
-  end
-
-  app.command :restart do |command|
-    command.summary "Restart process"
-    command.description "Restart process"
-
-    command.action do |options, arguments|
-      puts "hello restart"
-    end
-  end
+begin
+  Karo::CLI.start(ARGV)
+rescue SystemExit, Interrupt
+  puts "Exiting"
+rescue Exception => e
+  puts e
 end

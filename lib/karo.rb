@@ -1,5 +1,5 @@
 require "karo/version"
+require "karo/cli"
 
 module Karo
-  # Your code goes here...
 end

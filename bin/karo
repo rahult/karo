@@ -1,29 +1,51 @@
 #!/usr/bin/env ruby
 
-require 'optparse'
-require 'methadone'
+require 'escort'
+require 'pry'
 require 'karo.rb'
 
-class App
-  include Methadone::Main
-  include Methadone::CLILogging
-  include Methadone::SH
+Escort::App.create do |app|
+  app.config_file ".karo", autocreate: false
 
-  main do |from, to|
-    fixed_from = from.end_with?("/") ? from : from + "/"
-    fixed_to   = to.end_with?("/") ? to : to + "/"
+  app.version Karo::VERSION
+  app.summary "Sync database or assets with remote servers"
 
-    sh "rsync -azv #{fixed_from} #{fixed_to}"
+  app.options do |opts|
+    opts.opt :environment, "Environment", short: '-e',
+             long: '--environment', type: :string,
+             default: "production"
   end
 
-  version Karo::VERSION
+  app.command :start do |command|
+    command.summary "Start process"
+    command.description "Start process"
 
-  description "Sync database or assets with remote servers"
+    command.options do |opts|
+      opts.opt :reload, "Reload", short: '-r',
+               long: '--reload', type: :flag
+    end
 
-  arg :from, "sync from path"
-  arg :to, "sync to path"
+    command.action do |options, arguments|
+      binding.pry
+      puts "hello start"
+    end
+  end
 
-  use_log_level_option
+  app.command :stop do |command|
+    command.summary "Stop process"
+    command.description "Stop process"
 
-  go!
+    command.action do |options, arguments|
+      puts "hello stop"
+    end
+  end
+
+  app.command :restart do |command|
+    command.summary "Restart process"
+    command.description "Restart process"
+
+    command.action do |options, arguments|
+      puts "hello restart"
+    end
+  end
 end

@@ -30,7 +30,7 @@ module Karo
 
 	  desc "version", "displays karo's current version"
 	  def version
-	  	puts Karo::VERSION
+	  	say Karo::VERSION
 	  end
 
 	  private
@@ -39,14 +39,12 @@ module Karo
 	  	begin
 	  		configuration = Config.load_configuration(options[:config_file])[options[:environment]]
 		  	if configuration.nil? || configuration.empty?
-		  		puts "Please pass a valid configuration for this #{options[:environment]}"
-		  		return
+		  		raise Thor::Error, "Please pass a valid configuration for an environment '#{options[:environment]}'"
 		  	else
 		  		configuration
 		  	end
 		  rescue Karo::NoConfigFileFoundError
-		  	puts "Please check if this configuration file exists? #{options[:config_file]}"
-		  	return false
+		  	raise Thor::Error, "Please make sure if this configuration file exists? '#{options[:config_file]}'"
 		  end
 	  end
 

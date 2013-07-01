@@ -51,7 +51,7 @@ module Karo
 	    configuration = Config.load_configuration(options)
 
 	    path = File.join(configuration["path"], "current")
-	    ssh  = "ssh -t #{configuration["user"]}@#{configuration["host"]}"
+	    ssh  = "ssh #{configuration["user"]}@#{configuration["host"]} -t"
 	    cmd  = "cd #{path} && $SHELL"
 	    system "#{ssh} '#{cmd}'"
 	  end

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.1
+
+### Bug Fixes
+
+- Fixed a bug causing db pull to fail if no database exist
+
 ## v1.2.0
 
 ### Features

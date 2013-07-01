@@ -52,7 +52,7 @@ module Karo
       say "Loading #{options[:environment]} server database configuration", :green
 
       # Drop local database and re-create
-      system "mysql -v -h #{local_db_config["host"]} -u#{local_db_config["username"]} -p#{local_db_config["password"]} -e 'DROP DATABASE `#{local_db_config["database"]}`; CREATE DATABASE IF NOT EXISTS `#{local_db_config["database"]}`;'"
+      system "mysql -v -h #{local_db_config["host"]} -u#{local_db_config["username"]} -p#{local_db_config["password"]} -e 'DROP DATABASE IF EXISTS `#{local_db_config["database"]}`; CREATE DATABASE IF NOT EXISTS `#{local_db_config["database"]}`;'"
 
       ssh  = "ssh #{configuration["user"]}@#{configuration["host"]}"
 

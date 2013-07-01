@@ -10,6 +10,7 @@ module Karo
 
     include Thor::Actions
 
+    method_option :migrate, aliases: "-m", desc: "run migrations after sync", default: true
 	  desc "pull", "syncs MySQL database from server to localhost"
 	  def pull
 	    configuration = Config.load_configuration(options)
@@ -53,6 +54,11 @@ module Karo
 
       system "#{ssh} \"mysqldump --opt -C -u#{server_db_config["username"]} -p#{server_db_config["password"]} #{server_db_config["database"]}\" | mysql -v -h #{local_db_config["host"]} -C -u#{local_db_config["username"]} -p#{local_db_config["password"]} #{local_db_config["database"]}"
 
+      if options[:migrate]
+        say "Running rake db:migrations", :green
+        system "bundle exec rake db:migrate"
+      end
+
       say "Database sync complete", :green
 	  end
 
@@ -60,6 +66,16 @@ module Karo
 	  def push
       say "Pending Implementation...", :yellow
 	  end
+
+    desc "console", "open rails dbconsole for a given server environment"
+    def console
+      configuration = Config.load_configuration(options)
+
+      path = File.join(configuration["path"], "current")
+      ssh  = "ssh #{configuration["user"]}@#{configuration["host"]} -t"
+      cmd  = "cd #{path} && bundle exec rails dbconsole #{options[:environment]} -p"
+      system "#{ssh} '#{cmd}'"
+    end
 
 	end
 

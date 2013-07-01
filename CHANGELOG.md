@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1.0
+
+### Features
+
+- Added command to open ssh shell
+- Added command to open rails console
+- Added command to open rails dbconsole
+
 ## v1.0.0
 
 ### Features

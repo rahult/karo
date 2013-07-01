@@ -46,6 +46,26 @@ module Karo
 	    ap configuration if configuration
 	  end
 
+	  desc "ssh", "open ssh console for a given server environment"
+	  def ssh
+	    configuration = Config.load_configuration(options)
+
+	    path = File.join(configuration["path"], "current")
+	    ssh  = "ssh -t #{configuration["user"]}@#{configuration["host"]}"
+	    cmd  = "cd #{path} && $SHELL"
+	    system "#{ssh} '#{cmd}'"
+	  end
+
+	  desc "console", "open rails console for a given server environment"
+	  def console
+	    configuration = Config.load_configuration(options)
+
+	    path = File.join(configuration["path"], "current")
+	    ssh  = "ssh #{configuration["user"]}@#{configuration["host"]} -t"
+	    cmd  = "cd #{path} && bundle exec rails console #{options[:environment]}"
+	    system "#{ssh} '#{cmd}'"
+	  end
+
 	  desc "version", "displays karo's current version"
 	  def version
 	  	say Karo::VERSION

@@ -7,6 +7,10 @@ module Karo
 
     include Thor::Actions
 
+    class_option :config_file, type: :string, default: Config.default_file_name,
+                  aliases: "-c", desc: "name of the file containing server configuration"
+    class_option :environment, aliases: "-e", desc: "server environment", default: "production"
+
 	  desc "pull", "syncs assets from server shared/system/dragonfly/<environment> directory into local system/dragonfly/development directory"
 	  def pull
 	    configuration = Config.load_configuration(options)

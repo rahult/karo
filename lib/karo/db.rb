@@ -6,9 +6,13 @@ require 'ap'
 
 module Karo
 
-	class DB < Thor
+	class Db < Thor
 
     include Thor::Actions
+
+    class_option :config_file, type: :string, default: Config.default_file_name,
+                  aliases: "-c", desc: "name of the file containing server configuration"
+    class_option :environment, aliases: "-e", desc: "server environment", default: "production"
 
     method_option :migrate, aliases: "-m", desc: "run migrations after sync", default: true
 	  desc "pull", "syncs MySQL database from server to localhost"

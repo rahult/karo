@@ -1,0 +1,8 @@
+production:
+  host: example.com
+  user: deploy
+  path: /data/app_name
+staging:
+  host: example.com
+  user: deploy
+  path: /data/app_name

@@ -10,6 +10,8 @@ module Karo
 
 	class CLI < Thor
 
+		include Thor::Actions
+
 	  class_option :config_file, type: :string, default: Config.default_file_name,
 	  						  aliases: "-c", desc: "name of the file containing server configuration"
 	  class_option :environment, aliases: "-e", desc: "server environment", default: "production"
@@ -37,13 +39,23 @@ module Karo
     subcommand "assets", Assets
 
     desc "db [pull, push]", "syncs MySQL database between server and localhost"
-    subcommand "db", DB
+    subcommand "db", Db
 
 	  desc "config", "displays server configuration stored in a config file"
 	  def config
 	    configuration = Config.load_configuration(options)
 
 	    ap configuration if configuration
+	  end
+
+		def self.source_root
+    	File.dirname(__FILE__)
+  	end
+
+	  desc "generate", "generate a sample configuration file to be used by karo [default is .karo.yml]"
+	  def generate
+			config_file = File.expand_path(options[:config_file])
+	    copy_file 'templates/karo.yml', config_file
 	  end
 
 	  desc "ssh", "open ssh console for a given server environment"

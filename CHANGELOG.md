@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.2.0
+
+### Features
+
+- Added a .karo.yml template generator
+
+### Bug Fixes
+
+- Fixed a bug causing conflict passing global option to sub commands
+
 ## v1.1.0
 
 ### Features

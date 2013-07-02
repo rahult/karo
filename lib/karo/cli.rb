@@ -78,6 +78,26 @@ module Karo
 	    system "#{ssh} '#{cmd}'"
 	  end
 
+	  desc "top", "run top command on a given server environment"
+	  def top
+	    configuration = Config.load_configuration(options)
+
+	    path = File.join(configuration["path"], "current")
+	    ssh  = "ssh #{configuration["user"]}@#{configuration["host"]} -t"
+	    cmd  = "top"
+	    system "#{ssh} '#{cmd}'"
+	  end
+
+	  desc "on", "run any command within a given server environment"
+	  def on(*tokens)
+	    configuration = Config.load_configuration(options)
+
+	    path = File.join(configuration["path"], "current")
+	    ssh  = "ssh #{configuration["user"]}@#{configuration["host"]}"
+	    cmd  = tokens.join(" ")
+	    system "#{ssh} '#{cmd}'"
+	  end
+
 	  desc "version", "displays karo's current version"
 	  def version
 	  	say Karo::VERSION

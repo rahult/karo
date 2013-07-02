@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.3.0
+
+### Features
+
+- Added command to run top on a server
+- Added command to run any command on a server
+
 ## v1.2.1
 
 ### Bug Fixes

@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.4.0
+
+### Features
+
+- Added command 'command' to supercede 'on' command and deprecated 'on'
+- Added options to store custom commands for an environment within .karo.yml file
+
 ## v1.3.0
 
 ### Features

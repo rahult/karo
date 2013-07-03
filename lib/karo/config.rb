@@ -22,7 +22,9 @@ module Karo
 		  		configuration
 		  	end
 		  rescue Karo::NoConfigFileFoundError
-		  	raise Thor::Error, "Please make sure that this configuration file exists? '#{config_file}'"
+		  	puts "You can use 'karo generate' to generate a skeleton .karo.yml file"
+		  	puts "Please make sure that this configuration file exists? '#{config_file}'"
+		  	raise Thor::Error, "and run the command again"
 		  end
 	  end
 

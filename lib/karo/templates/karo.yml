@@ -2,7 +2,12 @@ production:
   host: example.com
   user: deploy
   path: /data/app_name
+  commands:
+    memory: watch vmstat -sSM
+    top_5_memory: ps aux | sort -nk +4 | tail
 staging:
   host: example.com
   user: deploy
   path: /data/app_name
+  commands:
+    memory: vmstat -sSM

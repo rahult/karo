@@ -3,11 +3,17 @@ production:
   user: deploy
   path: /data/app_name
   commands:
-    memory: watch vmstat -sSM
-    top_5_memory: ps aux | sort -nk +4 | tail
+    server:
+      memory: watch vmstat -sSM
+      top_5_memory: ps aux | sort -nk +4 | tail
+    client:
+      deploy: ey deploy -e production -r master
 staging:
   host: example.com
   user: deploy
   path: /data/app_name
   commands:
-    memory: vmstat -sSM
+    server:
+      memory: vmstat -sSM
+    client:
+      deploy: ey deploy -e staging -r staging

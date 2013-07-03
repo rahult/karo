@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.0.0
+
+### Features
+
+- Added command 'server' to execute commands remotely
+- Added command 'client' to execute commands locally
+- Removed command 'command', supceded by 'server'
+
 ## v1.5.0
 
 ### Bug Fixes

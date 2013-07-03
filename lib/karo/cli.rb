@@ -15,22 +15,7 @@ module Karo
     class_option :config_file, type: :string, default: Config.default_file_name,
                   aliases: "-c", desc: "name of the file containing server configuration"
     class_option :environment, aliases: "-e", desc: "server environment", default: "production"
-
-    desc "log", "displays server log for a given environment"
-    def log(name="")
-      configuration = Config.load_configuration(options)
-
-      path = File.join(configuration["path"], "shared/log/#{options["environment"]}.log")
-      ssh  = "ssh #{configuration["user"]}@#{configuration["host"]}"
-
-      if name.eql?("")
-        cmd = "tail -f #{path}"
-      else
-        cmd = "tail #{path} | grep -A 10 -B 10 #{name}"
-      end
-
-      system "#{ssh} '#{cmd}'"
-    end
+    class_option :verbose, type: :boolean, lazy_default: true, aliases: "-v", desc: "verbose"
 
     desc "cache [search, remove]", "find or clears a specific or all cache from shared/cache directory on the server"
     subcommand "cache", Cache
@@ -58,11 +43,59 @@ module Karo
       copy_file 'templates/karo.yml', config_file
     end
 
-    desc "command [COMMAND]", "run any command within a given server environment"
+    desc "client [COMMAND]", "run any command within a given client environment"
+    long_desc <<-LONGDESC
+    `karo client [command]` or `karo clt [command]` will run the [COMMAND] cliently.
+
+    e.g. Display list of files on the client machine
+
+    > $ karo client ls
+
+    CHANGELOG.md Gemfile.lock README.md
+
+    You can also store custom commands for a given environment in the configuration file
+
+    e.g. .karo.yml
+
+    production:
+
+    --host: example.com
+
+    --user: deploy
+
+    --path: /data/app_name
+
+    --commands:
+
+    ----client:
+
+    ------deploy: ey deploy -e production -r master
+
+    > $ karo clt deploy
+
+    > Loading application data from Engine Yard Cloud...
+
+    > Beginning deploy...
+    LONGDESC
+    def client(cmd)
+      configuration = Config.load_configuration(options)
+
+      if configuration["commands"] && configuration["commands"]["client"] && configuration["commands"]["client"][cmd]
+        cmd = configuration["commands"]["client"][cmd]
+      end
+
+      say cmd, :green if options[:verbose]
+
+      system cmd
+    end
+    map clt:   :client
+    map local: :client
+
+    desc "server [COMMAND]", "run any command within a given server environment"
     method_option :tty, aliases: "-t", desc: "force pseudo-tty allocation",
                   type: :boolean, default: true
     long_desc <<-LONGDESC
-    `karo command [command]` or `karo cmd [command]`
+    `karo server [command]` or `karo srv [command]`
 
     will run the [COMMAND] passed on the server.
 
@@ -70,13 +103,13 @@ module Karo
 
     e.g. Display list of files on the staging server
 
-    > $ karo command ls -e staging --no-tty
+    > $ karo server ls -e staging --no-tty
 
     CHANGELOG.md Gemfile.lock README.md
 
     e.g. Run top command on the production server
 
-    > $ karo command top
+    > $ karo server top
 
     > top - 17:14:06 up 219 days, 11:30,  1 user,  load average: 0.28, 0.49, 0.47
 
@@ -94,11 +127,13 @@ module Karo
 
     --commands:
 
-    ----memory: watch vmstat -sSM
+    ----server:
 
-    ----top_5_memory: ps aux | sort -nk +4 | tail
+    ------memory: watch vmstat -sSM
 
-    > $ karo cmd memory
+    ------top_5_memory: ps aux | sort -nk +4 | tail
+
+    > $ karo srv memory
 
     > Every 2.0s: vmstat -sSM Tue Jul  2 17:18:16 2013
 
@@ -108,7 +143,7 @@ module Karo
 
     > 25224800  active memory
     LONGDESC
-    def command(cmd)
+    def server(cmd)
       configuration = Config.load_configuration(options)
 
       ssh  = "ssh #{configuration["user"]}@#{configuration["host"]}"
@@ -116,26 +151,21 @@ module Karo
       # Forces pseudo-tty allocation
       ssh << " -t" if options[:tty]
 
-      if configuration["commands"] && configuration["commands"][cmd]
-        cmd = configuration["commands"][cmd]
+      if configuration["commands"] && configuration["commands"]["server"] && configuration["commands"]["server"][cmd]
+        cmd = configuration["commands"]["server"][cmd]
       end
 
-      system "#{ssh} '#{cmd}'"
-    end
-    map cmd: :command
+      to_run = "#{ssh} '#{cmd}'"
 
-    desc "on [COMMAND]", "run any command within a given server environment"
-    method_option :tty, aliases: "-t", desc: "force pseudo-tty allocation",
-                  type: :boolean, default: true
-    def on(cmd)
-      say "Deprecated and will be removed in version 2.0", :yellow
-      say "Please use 'command' instead", :yellow
-      invoke :command
+      say to_run, :green if options[:verbose]
+      system to_run
     end
+    map srv:    :server
+    map remote: :server
 
     desc "top", "run top command on a given server environment"
     def top
-      invoke :command, ["top"]
+      invoke :server, ["top"]
     end
 
     desc "ssh", "open ssh console for a given server environment"
@@ -146,7 +176,7 @@ module Karo
       cmd  = "cd #{path}; export RAILS_ENV=#{options[:environment]}; \
               export RACK_ENV=#{options[:environment]}; $SHELL"
 
-      invoke :command, [cmd]
+      invoke :server, [cmd]
     end
 
     desc "console", "open rails console for a given server environment"
@@ -156,7 +186,22 @@ module Karo
       path = File.join(configuration["path"], "current")
       cmd  = "cd #{path} && bundle exec rails console #{options[:environment]}"
 
-      invoke :command, [cmd]
+      invoke :server, [cmd]
+    end
+
+    desc "log", "displays server log for a given environment"
+    def log(name="")
+      configuration = Config.load_configuration(options)
+
+      path = File.join(configuration["path"], "shared/log/#{options["environment"]}.log")
+
+      if name.eql?("")
+        cmd = "tail -f #{path}"
+      else
+        cmd = "tail #{path} | grep -A 10 -B 10 #{name}"
+      end
+
+      invoke :server, [cmd]
     end
 
     desc "version", "displays karo's current version"

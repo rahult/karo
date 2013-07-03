@@ -10,6 +10,7 @@ module Karo
     class_option :config_file, type: :string, default: Config.default_file_name,
                   aliases: "-c", desc: "name of the file containing server configuration"
     class_option :environment, aliases: "-e", desc: "server environment", default: "production"
+    class_option :verbose, type: :boolean, lazy_default: true, aliases: "-v", desc: "verbose"
 
 	  desc "pull", "syncs assets from server shared/system/dragonfly/<environment> directory into local system/dragonfly/development directory"
 	  def pull
@@ -23,7 +24,9 @@ module Karo
 	    host = "deploy@#{configuration["host"]}"
 	    cmd  = "rsync -az --progress #{host}:#{path_server}/ #{path_local}/"
 
-      system "#{cmd}"
+      say cmd, :green if options[:verbose]
+
+      system cmd
 
       say "Assets sync complete", :green
 	  end
@@ -43,6 +46,11 @@ module Karo
 
       cmd_1  = "ssh #{host} 'mkdir -p #{path_server}'"
       cmd_2  = "rsync -az --progress #{path_local}/ #{host}:#{path_server}/"
+
+      if options[:verbose]
+        say cmd_1, :green
+        say cmd_2, :green
+      end
 
       if yes?("Are you sure?", :yellow)
         system "#{cmd_1}"

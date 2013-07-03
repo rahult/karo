@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.5.0
+
+### Bug Fixes
+
+- Fixed ssh command to export RAILS_ENV and RACK_ENV before starting the shell
+- Updated description for assets command to specify dragonfly
+
 ## v1.4.0
 
 ### Features

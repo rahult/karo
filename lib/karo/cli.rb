@@ -35,7 +35,7 @@ module Karo
     desc "cache [search, remove]", "find or clears a specific or all cache from shared/cache directory on the server"
     subcommand "cache", Cache
 
-    desc "assets [pull, push]", "syncs assets between server shared/system/dragonfly/<environment> directory and local system/dragonfly/development directory"
+    desc "assets [pull, push]", "syncs dragonfly assets between server shared/system/dragonfly/<environment> directory and local system/dragonfly/development directory"
     subcommand "assets", Assets
 
     desc "db [pull, push]", "syncs MySQL database between server and localhost"
@@ -56,26 +56,6 @@ module Karo
     def generate
       config_file = File.expand_path(options[:config_file])
       copy_file 'templates/karo.yml', config_file
-    end
-
-    desc "ssh", "open ssh console for a given server environment"
-    def ssh
-      configuration = Config.load_configuration(options)
-
-      path = File.join(configuration["path"], "current")
-      ssh  = "ssh #{configuration["user"]}@#{configuration["host"]} -t"
-      cmd  = "cd #{path} && $SHELL"
-      system "#{ssh} '#{cmd}'"
-    end
-
-    desc "console", "open rails console for a given server environment"
-    def console
-      configuration = Config.load_configuration(options)
-
-      path = File.join(configuration["path"], "current")
-      ssh  = "ssh #{configuration["user"]}@#{configuration["host"]} -t"
-      cmd  = "cd #{path} && bundle exec rails console #{options[:environment]}"
-      system "#{ssh} '#{cmd}'"
     end
 
     desc "command [COMMAND]", "run any command within a given server environment"
@@ -154,10 +134,29 @@ module Karo
     end
 
     desc "top", "run top command on a given server environment"
-    method_option :tty, aliases: "-t", desc: "force pseudo-tty allocation",
-                  type: :boolean, default: true
     def top
       invoke :command, ["top"]
+    end
+
+    desc "ssh", "open ssh console for a given server environment"
+    def ssh
+      configuration = Config.load_configuration(options)
+
+      path = File.join(configuration["path"], "current")
+      cmd  = "cd #{path}; export RAILS_ENV=#{options[:environment]}; \
+              export RACK_ENV=#{options[:environment]}; $SHELL"
+
+      invoke :command, [cmd]
+    end
+
+    desc "console", "open rails console for a given server environment"
+    def console
+      configuration = Config.load_configuration(options)
+
+      path = File.join(configuration["path"], "current")
+      cmd  = "cd #{path} && bundle exec rails console #{options[:environment]}"
+
+      invoke :command, [cmd]
     end
 
     desc "version", "displays karo's current version"

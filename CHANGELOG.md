@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.2
+
+### Features
+
+- Refactoring Db "pull" command
+
 ## v2.1.1
 
 ### Features

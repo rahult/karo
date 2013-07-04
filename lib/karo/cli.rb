@@ -77,18 +77,10 @@ module Karo
 
     > Beginning deploy...
     LONGDESC
-    def client(cmd, *extra)
+    def client(cmd, *extras)
       configuration = Config.load_configuration(options)
-
-      if configuration["commands"] && configuration["commands"]["client"] && configuration["commands"]["client"][cmd]
-        cmd = configuration["commands"]["client"][cmd]
-      end
-
-      to_run = "#{cmd} #{extra.flatten.uniq.join(" ")}"
-
-      say to_run, :green if options[:verbose]
-
-      system to_run
+      command = make_command configuration, "client", cmd, extras
+      run_it command, options[:verbose]
     end
     map clt:   :client
     map local: :client
@@ -145,29 +137,21 @@ module Karo
 
     > 25224800  active memory
     LONGDESC
-    def server(cmd, *extra)
+    def server(cmd, *extras)
       configuration = Config.load_configuration(options)
 
       ssh  = "ssh #{configuration["user"]}@#{configuration["host"]}"
-
-      # Forces pseudo-tty allocation
       ssh << " -t" if options[:tty]
 
-      if configuration["commands"] && configuration["commands"]["server"] && configuration["commands"]["server"][cmd]
-        cmd = configuration["commands"]["server"][cmd]
-      end
-
-      to_run = "#{ssh} '#{cmd} #{extra.flatten.uniq.join(" ")}'"
-
-      say to_run, :green if options[:verbose]
-      system to_run
+      command = make_command configuration, "server", cmd, extras
+      run_it "#{ssh} #{command}", options[:verbose]
     end
     map srv:    :server
     map remote: :server
 
     desc "top", "run top command on a given server environment"
-    def top(*extra)
-      invoke :server, ["top", extra]
+    def top(*extras)
+      invoke :server, ["top", extras]
     end
 
     desc "ssh", "open ssh console for a given server environment"
@@ -192,18 +176,18 @@ module Karo
     end
 
     desc "rake", "run rake commands for a rails app on a given server environment"
-    def rake(command, *extra)
+    def rake(command, *extras)
       configuration = Config.load_configuration(options)
 
       path = File.join(configuration["path"], "current")
       cmd  = "cd #{path} && export RAILS_ENV=#{options[:environment]} && bundle exec rake #{command}"
 
-      invoke :server, [cmd, extra]
+      invoke :server, [cmd, extras]
     end
 
     desc "log", "displays server log for a given environment"
     class_option :continous, type: :boolean, lazy_default: true, aliases: "-f", desc: "The -f option causes tail to not stop when end of file is reached, but rather to wait for additional data to be appended to the input."
-    def log(*extra)
+    def log(*extras)
       configuration = Config.load_configuration(options)
 
       path = File.join(configuration["path"], "shared/log/#{options["environment"]}.log")
@@ -212,12 +196,31 @@ module Karo
       cmd << " -f" if options[:continous]
       cmd << " #{path}"
 
-      invoke :server, [cmd, extra]
+      invoke :server, [cmd, extras]
     end
 
     desc "version", "displays karo's current version"
     def version
       say Karo::VERSION
+    end
+
+    private
+
+    def make_command(configuration, namespace, command, extras)
+      commands = configuration["commands"]
+
+      if commands && commands[namespace] && commands[namespace][command]
+        command = commands[namespace][command]
+      end
+
+      extras = extras.flatten.uniq.join(" ")
+
+      "#{command} #{extras}"
+    end
+
+    def run_it(cmd, verbose=false)
+      say cmd, :green if verbose
+      system cmd
     end
 
   end

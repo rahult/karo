@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.1
+
+### Features
+
+- Refactoring CLI "server" and "client" commands
+
 ## v2.1.0
 
 ### Features

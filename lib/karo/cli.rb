@@ -77,16 +77,18 @@ module Karo
 
     > Beginning deploy...
     LONGDESC
-    def client(cmd)
+    def client(cmd, *extra)
       configuration = Config.load_configuration(options)
 
       if configuration["commands"] && configuration["commands"]["client"] && configuration["commands"]["client"][cmd]
         cmd = configuration["commands"]["client"][cmd]
       end
 
-      say cmd, :green if options[:verbose]
+      to_run = "#{cmd} #{extra.flatten.uniq.join(" ")}"
 
-      system cmd
+      say to_run, :green if options[:verbose]
+
+      system to_run
     end
     map clt:   :client
     map local: :client
@@ -143,7 +145,7 @@ module Karo
 
     > 25224800  active memory
     LONGDESC
-    def server(cmd)
+    def server(cmd, *extra)
       configuration = Config.load_configuration(options)
 
       ssh  = "ssh #{configuration["user"]}@#{configuration["host"]}"
@@ -155,7 +157,7 @@ module Karo
         cmd = configuration["commands"]["server"][cmd]
       end
 
-      to_run = "#{ssh} '#{cmd}'"
+      to_run = "#{ssh} '#{cmd} #{extra.flatten.uniq.join(" ")}'"
 
       say to_run, :green if options[:verbose]
       system to_run
@@ -164,8 +166,8 @@ module Karo
     map remote: :server
 
     desc "top", "run top command on a given server environment"
-    def top
-      invoke :server, ["top"]
+    def top(*extra)
+      invoke :server, ["top", extra]
     end
 
     desc "ssh", "open ssh console for a given server environment"
@@ -189,19 +191,28 @@ module Karo
       invoke :server, [cmd]
     end
 
+    desc "rake", "run rake commands for a rails app on a given server environment"
+    def rake(command, *extra)
+      configuration = Config.load_configuration(options)
+
+      path = File.join(configuration["path"], "current")
+      cmd  = "cd #{path} && export RAILS_ENV=#{options[:environment]} && bundle exec rake #{command}"
+
+      invoke :server, [cmd, extra]
+    end
+
     desc "log", "displays server log for a given environment"
-    def log(name="")
+    class_option :continous, type: :boolean, lazy_default: true, aliases: "-f", desc: "The -f option causes tail to not stop when end of file is reached, but rather to wait for additional data to be appended to the input."
+    def log(*extra)
       configuration = Config.load_configuration(options)
 
       path = File.join(configuration["path"], "shared/log/#{options["environment"]}.log")
 
-      if name.eql?("")
-        cmd = "tail -f #{path}"
-      else
-        cmd = "tail #{path} | grep -A 10 -B 10 #{name}"
-      end
+      cmd = "tail"
+      cmd << " -f" if options[:continous]
+      cmd << " #{path}"
 
-      invoke :server, [cmd]
+      invoke :server, [cmd, extra]
     end
 
     desc "version", "displays karo's current version"

@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.1.0
+
+### Features
+
+- Added command 'rake' to run rake tasks for a rails app on a given server environment
+- Added options to pass extra command line parameters to 'server' command
+- Added options to pass extra command line parameters to 'client' command
+- Added options to pass extra command line parameters to 'log' command
+- Added options to pass extra command line parameters to 'top' command
+
 ## v2.0.0
 
 ### Features

@@ -1,16 +1,11 @@
-require 'karo/config'
+require 'karo/common'
 require 'thor'
 
 module Karo
 
 	class Assets < Thor
 
-    include Thor::Actions
-
-    class_option :config_file, type: :string, default: Config.default_file_name,
-                  aliases: "-c", desc: "name of the file containing server configuration"
-    class_option :environment, aliases: "-e", desc: "server environment", default: "production"
-    class_option :verbose, type: :boolean, lazy_default: true, aliases: "-v", desc: "verbose"
+    include Karo::Common
 
 	  desc "pull", "syncs assets from server shared/system/dragonfly/<environment> directory into local system/dragonfly/development directory"
 	  def pull
@@ -22,11 +17,9 @@ module Karo
       path_server = File.join(configuration["path"], "shared/system/dragonfly/#{options[:environment]}")
 
 	    host = "deploy@#{configuration["host"]}"
-	    cmd  = "rsync -az --progress #{host}:#{path_server}/ #{path_local}/"
+	    command  = "rsync -az --progress #{host}:#{path_server}/ #{path_local}/"
 
-      say cmd, :green if options[:verbose]
-
-      system cmd
+      run_it command, options[:verbose]
 
       say "Assets sync complete", :green
 	  end
@@ -44,17 +37,12 @@ module Karo
 
       path_server = File.join(configuration["path"], "shared/system/dragonfly/#{options[:environment]}")
 
-      cmd_1  = "ssh #{host} 'mkdir -p #{path_server}'"
-      cmd_2  = "rsync -az --progress #{path_local}/ #{host}:#{path_server}/"
-
-      if options[:verbose]
-        say cmd_1, :green
-        say cmd_2, :green
-      end
+      command_1  = "ssh #{host} 'mkdir -p #{path_server}'"
+      command_2  = "rsync -az --progress #{path_local}/ #{host}:#{path_server}/"
 
       if yes?("Are you sure?", :yellow)
-        system "#{cmd_1}"
-        system "#{cmd_2}"
+        run_it command_1, options[:verbose]
+        run_it command_2, options[:verbose]
         say "Assets sync complete", :green
       else
         say "Assets sync cancelled", :yellow

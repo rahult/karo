@@ -1,19 +1,11 @@
-require 'karo/config'
-require 'thor'
-require 'yaml'
+require 'karo/common'
 require 'erb'
-require 'ap'
 
 module Karo
 
 	class Db < Thor
 
-    include Thor::Actions
-
-    class_option :config_file, type: :string, default: Config.default_file_name,
-                  aliases: "-c", desc: "name of the file containing server configuration"
-    class_option :environment, aliases: "-e", desc: "server environment", default: "production"
-    class_option :verbose, type: :boolean, lazy_default: true, aliases: "-v", desc: "verbose"
+    include Karo::Common
 
     method_option :migrate, aliases: "-m", desc: "run migrations after sync", default: true
 	  desc "pull", "syncs MySQL database from server to localhost"
@@ -53,23 +45,19 @@ module Karo
       say "Loading #{options[:environment]} server database configuration", :green
 
       # Drop local database and re-create
-      to_run = "mysql -v -h #{local_db_config["host"]} -u#{local_db_config["username"]} -p#{local_db_config["password"]} -e 'DROP DATABASE IF EXISTS `#{local_db_config["database"]}`; CREATE DATABASE IF NOT EXISTS `#{local_db_config["database"]}`;'"
+      command = "mysql -v -h #{local_db_config["host"]} -u#{local_db_config["username"]} -p#{local_db_config["password"]} -e 'DROP DATABASE IF EXISTS `#{local_db_config["database"]}`; CREATE DATABASE IF NOT EXISTS `#{local_db_config["database"]}`;'"
 
-      say to_run, :green if options[:verbose]
-
-      system to_run
+      run_it command, options[:verbose]
 
       ssh  = "ssh #{configuration["user"]}@#{configuration["host"]}"
 
-      to_run = "#{ssh} \"mysqldump --opt -C -u#{server_db_config["username"]} -p#{server_db_config["password"]} #{server_db_config["database"]}\" | mysql -v -h #{local_db_config["host"]} -C -u#{local_db_config["username"]} -p#{local_db_config["password"]} #{local_db_config["database"]}"
+      command = "#{ssh} \"mysqldump --opt -C -u#{server_db_config["username"]} -p#{server_db_config["password"]} #{server_db_config["database"]}\" | mysql -v -h #{local_db_config["host"]} -C -u#{local_db_config["username"]} -p#{local_db_config["password"]} #{local_db_config["database"]}"
 
-      say to_run, :green if options[:verbose]
-
-      system to_run
+      run_it command, options[:verbose]
 
       if options[:migrate]
         say "Running rake db:migrations", :green
-        system "bundle exec rake db:migrate"
+        run_it "bundle exec rake db:migrate", options[:verbose]
       end
 
       say "Database sync complete", :green
@@ -88,16 +76,11 @@ module Karo
 
       path = File.join(configuration["path"], "current")
       ssh  = "ssh #{configuration["user"]}@#{configuration["host"]}"
-
-      # Forces pseudo-tty allocation
       ssh << " -t" if options[:tty]
 
-      cmd  = "cd #{path} && bundle exec rails dbconsole #{options[:environment]} -p"
+      command  = "cd #{path} && bundle exec rails dbconsole #{options[:environment]} -p"
 
-      to_run = "#{ssh} '#{cmd}'"
-
-      say to_run, :green if options[:verbose]
-      system to_run
+      run_it "#{ssh} '#{command}'", options[:verbose]
     end
 
 	end

@@ -1,15 +1,20 @@
 require 'karo/version'
-require 'karo/config'
+require 'karo/common'
 require 'karo/assets'
 require 'karo/cache'
 require 'karo/db'
-require 'thor'
 require 'ap'
 
 module Karo
 
   class CLI < Thor
 
+    include Karo::Common
+
+    # FIXME: Duplicated in Karo::Common
+    # Is needed for the generate method
+    # Otherwise you get this error
+    # undefined method `source_paths_for_search' for Karo::CLI
     include Thor::Actions
 
     class_option :config_file, type: :string, default: Config.default_file_name,
@@ -23,7 +28,7 @@ module Karo
     desc "assets [pull, push]", "syncs dragonfly assets between server shared/system/dragonfly/<environment> directory and local system/dragonfly/development directory"
     subcommand "assets", Assets
 
-    desc "db [pull, push]", "syncs MySQL database between server and localhost"
+    desc "db [pull, push, console]", "syncs MySQL database between server and localhost"
     subcommand "db", Db
 
     desc "config", "displays server configuration stored in a config file"
@@ -144,7 +149,7 @@ module Karo
       ssh << " -t" if options[:tty]
 
       command = make_command configuration, "server", cmd, extras
-      run_it "#{ssh} #{command}", options[:verbose]
+      run_it "#{ssh} '#{command}'", options[:verbose]
     end
     map srv:    :server
     map remote: :server
@@ -202,25 +207,6 @@ module Karo
     desc "version", "displays karo's current version"
     def version
       say Karo::VERSION
-    end
-
-    private
-
-    def make_command(configuration, namespace, command, extras)
-      commands = configuration["commands"]
-
-      if commands && commands[namespace] && commands[namespace][command]
-        command = commands[namespace][command]
-      end
-
-      extras = extras.flatten.uniq.join(" ")
-
-      "#{command} #{extras}"
-    end
-
-    def run_it(cmd, verbose=false)
-      say cmd, :green if verbose
-      system cmd
     end
 
   end

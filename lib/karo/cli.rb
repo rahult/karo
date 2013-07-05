@@ -11,10 +11,7 @@ module Karo
 
     include Karo::Common
 
-    # FIXME: Duplicated in Karo::Common
-    # Is needed for the generate method
-    # Otherwise you get this error
-    # undefined method `source_paths_for_search' for Karo::CLI
+    # FIXME: Duplicated in Karo::Common but is needed for the generate method
     include Thor::Actions
 
     class_option :config_file, type: :string, default: Config.default_file_name,
@@ -64,12 +61,6 @@ module Karo
 
     production:
 
-    --host: example.com
-
-    --user: deploy
-
-    --path: /data/app_name
-
     --commands:
 
     ----client:
@@ -118,19 +109,11 @@ module Karo
 
     production:
 
-    --host: example.com
-
-    --user: deploy
-
-    --path: /data/app_name
-
     --commands:
 
     ----server:
 
     ------memory: watch vmstat -sSM
-
-    ------top_5_memory: ps aux | sort -nk +4 | tail
 
     > $ karo srv memory
 
@@ -139,8 +122,6 @@ module Karo
     > 35840140  total memory
 
     > 35308456  used memory
-
-    > 25224800  active memory
     LONGDESC
     def server(cmd, *extras)
       configuration = Config.load_configuration(options)

@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.3
+
+### Features
+
+- Updated some comments in CLI
+
 ## v2.1.2
 
 ### Features

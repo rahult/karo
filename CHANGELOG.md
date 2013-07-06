@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.2.0
+
+### Features
+
+- Added basic git workflow to create feature and bug fix branches
+
 ## v2.1.3
 
 ### Features

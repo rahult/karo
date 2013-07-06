@@ -1,3 +1,4 @@
+require 'karo/workflow'
 require 'karo/version'
 require 'karo/common'
 require 'karo/assets'
@@ -27,6 +28,9 @@ module Karo
 
     desc "db [pull, push, console]", "syncs MySQL database between server and localhost"
     subcommand "db", Db
+
+    desc "workflow [feature, bugfix]", "basic git workflow to create feature and bugfix branches"
+    subcommand "workflow", Workflow
 
     desc "config", "displays server configuration stored in a config file"
     def config

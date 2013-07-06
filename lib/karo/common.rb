@@ -24,6 +24,31 @@ module Karo
       system cmd
     end
 
+    def git_repo
+      Grit::Repo.new(".")
+    end
+
+    def branch_exists?(name)
+      git_repo.branches.find { |b| b.name.start_with?(name) }
+    end
+
+    def create_branch(name)
+      run_it "git branch #{name}", options[:verbose]
+    end
+
+    def checkout_branch(name)
+      run_it "git checkout #{name}", options[:verbose]
+    end
+
+    def current_branch
+      git_repo.head.name
+    end
+
+    def create_and_checkout_branch(name)
+      create_branch name
+      checkout_branch name
+    end
+
   end
 
 end

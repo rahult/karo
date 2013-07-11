@@ -2,7 +2,7 @@
 
 **Karo** is a command line companion for a rails application which makes performing routing commands locally and on the server easier.
 
-## A few of things it can do (for rest please refer to ```karo help```)
+*A few of things it can do (for rest please refer to ```karo help```)*
 
 ```bash
 karo db pull # Will sync the production MySQL database on to local machine
@@ -17,7 +17,7 @@ karo server {command} # Will try to find a command from .karo.yml or execute the
 karo client {command} # Will try to find a command from .karo.yml or execute the one provided on the client
 ```
 
-## Few Assumptions
+### Few Assumptions
 
 - You have SSH access to your servers
 - You have the following directory structure on your server
@@ -36,7 +36,7 @@ karo client {command} # Will try to find a command from .karo.yml or execute the
 
 I am working on supporting other databases and assets managers for future releases
 
-## Installation
+### Installation
 
 Karo is released as a Ruby Gem. The gem is to be installed within a Ruby
 on Rails application. To install, simply add the following to your Gemfile:
@@ -48,7 +48,7 @@ gem 'karo'
 
 After updating your bundle, you can use Karo function from the command line
 
-## Usage (Commandline)
+### Usage (command line)
 
 ```bash
 karo help

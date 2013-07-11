@@ -54,7 +54,7 @@ After updating your bundle, you can use Karo function from the command line
 karo help
 ```
 
-Default configuration file
+### Default configuration file (.karo.yml)
 
 ```yml
 production:

@@ -32,7 +32,7 @@
       <section>
         <div id="title">
           <h1>Karo</h1>
-          <p>**Karo** is a commandline companion for a rails application making db, assets syncing easier while development</p>
+          <p>*Karo* is a commandline companion for a rails application making db, assets syncing easier while development</p>
           <hr>
           <span class="credits left">Project maintained by <a href="https://github.com/rahult">rahult</a></span>
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
@@ -41,10 +41,43 @@
         <h1>
 <a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h1>
 
-<p><strong>Karo</strong> is a commandline companion for a rails application which makes db, assets syncs across multiple rails servers easier while development</p>
+<p><strong>Karo</strong> is a command line companion for a rails application which makes performing routing commands locally and on the server easier.</p>
 
-<h2>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+<p><em>A few of things it can do (for rest please refer to <code>karo help</code>)</em></p>
+
+<div class="highlight"><pre>karo db pull <span class="c"># Will sync the production MySQL database on to local machine</span>
+karo assets pull -e staging <span class="c"># Will sync the dragonfly assets from staging on to the local machine</span>
+karo log -f <span class="c"># Will tail the production log with -f argument</span>
+</pre></div>
+
+<p>You can also write your custom commands</p>
+
+<div class="highlight"><pre>karo server <span class="o">{</span><span class="nb">command</span><span class="o">}</span> <span class="c"># Will try to find a command from .karo.yml or execute the one provided on the server</span>
+karo client <span class="o">{</span><span class="nb">command</span><span class="o">}</span> <span class="c"># Will try to find a command from .karo.yml or execute the one provided on the client</span>
+</pre></div>
+
+<h3>
+<a name="few-assumptions" class="anchor" href="#few-assumptions"><span class="octicon octicon-link"></span></a>Few Assumptions</h3>
+
+<ul>
+<li>You have SSH access to your servers</li>
+<li>You have the following directory structure on your server
+[deploy_to]
+[deploy_to]/releases
+[deploy_to]/releases/20080819001122
+[deploy_to]/releases/...
+[deploy_to]/shared
+[deploy_to]/shared/config/database.yml
+[deploy_to]/shared/log
+[deploy_to]/shared/pids
+[deploy_to]/shared/system
+[deploy_to]/current -&gt; [deploy_to]/releases/20100819001122</li>
+<li>You are using MySQL as your database server</li>
+<li>You are using Dragonfly to store your assets</li>
+</ul><p>I am working on supporting other databases and assets managers for future releases</p>
+
+<h3>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
 
 <p>Karo is released as a Ruby Gem. The gem is to be installed within a Ruby
 on Rails application. To install, simply add the following to your Gemfile:</p>
@@ -55,10 +88,34 @@ on Rails application. To install, simply add the following to your Gemfile:</p>
 
 <p>After updating your bundle, you can use Karo function from the command line</p>
 
-<h2>
-<a name="usage-commandline" class="anchor" href="#usage-commandline"><span class="octicon octicon-link"></span></a>Usage (Commandline)</h2>
+<h3>
+<a name="usage-command-line" class="anchor" href="#usage-command-line"><span class="octicon octicon-link"></span></a>Usage (command line)</h3>
 
 <div class="highlight"><pre>karo <span class="nb">help</span>
+</pre></div>
+
+<h3>
+<a name="default-configuration-file-karoyml" class="anchor" href="#default-configuration-file-karoyml"><span class="octicon octicon-link"></span></a>Default configuration file (.karo.yml)</h3>
+
+<div class="highlight"><pre><span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">example.com</span>
+  <span class="l-Scalar-Plain">user</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">deploy</span>
+  <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/data/app_name</span>
+  <span class="l-Scalar-Plain">commands</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">memory</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">watch vmstat -sSM</span>
+      <span class="l-Scalar-Plain">top_5_memory</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ps aux | sort -nk +4 | tail</span>
+    <span class="l-Scalar-Plain">client</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">deploy</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">cap production deploy</span>
+<span class="l-Scalar-Plain">staging</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">example.com</span>
+  <span class="l-Scalar-Plain">user</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">deploy</span>
+  <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/data/app_name</span>
+  <span class="l-Scalar-Plain">commands</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">memory</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">vmstat -sSM</span>
+    <span class="l-Scalar-Plain">client</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">deploy</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ey deploy -e staging -r staging</span>
 </pre></div>
       </section>
 

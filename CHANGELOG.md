@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.3.0
+
+### Features
+
+- Updated readme
+- Removed fixed rake version dependency
+
 ## v2.2.1
 
 ### Features

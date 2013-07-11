@@ -6,6 +6,8 @@ Example of things it can do, for rest please refer to ```karo help```
 
 ```bash
 karo db pull # Will sync the production MySQL database on to local machine
+karo db console # Will open MySQL console on the server
+karo console # Will open Rails console on the server
 karo assets pull -e staging # Will sync the dragonfly assets from staging on to the local machine
 karo log -f # Will tail the production log with -f argument
 ```

@@ -85,6 +85,11 @@ module Karo
     map clt:   :client
     map local: :client
 
+    desc "deploy", "(shortcut for > karo client deploy)"
+    def deploy(*extras)
+      invoke :client, ["deploy", extras]
+    end
+
     desc "server [COMMAND]", "run any command within a given server environment"
     method_option :tty, aliases: "-t", desc: "force pseudo-tty allocation",
                   type: :boolean, default: true

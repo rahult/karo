@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.2.1
+
+### Features
+
+- Added a shortcut for `karo client deploy` -> `karo deploy`
+
 ## v2.2.0
 
 ### Features

@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.3.1
+
+### Features
+
+- Added semantic dependency values for thor, grit and awesome_print
+
 ## v2.3.0
 
 ### Features

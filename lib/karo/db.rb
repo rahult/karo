@@ -70,7 +70,7 @@ module Karo
     def load_server_db_config
       server_db_config_file = File.join(@configuration["path"], "shared/config/database.yml")
 
-      host = "deploy@#{@configuration["host"]}"
+      host = "#{@configuration["user"]}@#{@configuration["host"]}"
       cmd  = "ssh #{host} 'cat #{server_db_config_file}'"
 
       server_db_config_output = `#{cmd}`

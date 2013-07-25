@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.3.2
+
+### Bug Fixes
+
+- Removed hard coded `deploy` user dependency from  db server config [https://github.com/rahult/karo/pull/5](https://github.com/rahult/karo/pull/5)
+
 ## v2.3.1
 
 ### Features

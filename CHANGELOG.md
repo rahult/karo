@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.3.3
+
+### Bug Fixes
+
+- Removed hard coded `deploy` user dependency from assets server config
+
 ## v2.3.2
 
 ### Bug Fixes

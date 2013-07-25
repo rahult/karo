@@ -16,7 +16,7 @@ module Karo
 
       path_server = File.join(configuration["path"], "shared/system/dragonfly/#{options[:environment]}")
 
-	    host = "deploy@#{configuration["host"]}"
+	    host = "#{configuration["user"]}@#{configuration["host"]}"
 	    command  = "rsync -az --progress #{host}:#{path_server}/ #{path_local}/"
 
       run_it command, options[:verbose]
@@ -33,7 +33,7 @@ module Karo
         raise Thor::Error, "Please make sure that this local path exists? '#{path_local}'"
       end
 
-      host = "deploy@#{configuration["host"]}"
+      host = "#{configuration["user"]}@#{configuration["host"]}"
 
       path_server = File.join(configuration["path"], "shared/system/dragonfly/#{options[:environment]}")
 

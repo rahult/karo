@@ -180,6 +180,16 @@ module Karo
       invoke :server, [cmd, extras]
     end
 
+    desc "vim", "open a given file or folder on the server using VIM"
+    def vim(command="", *extras)
+      configuration = Config.load_configuration(options)
+
+      path = File.join(configuration["path"], "current", command)
+      cmd  = "vim scp://#{configuration["user"]}@#{configuration["host"]}/#{path}"
+
+      invoke :client, [cmd, extras]
+    end
+
     desc "log", "displays server log for a given environment"
     class_option :continous, type: :boolean, lazy_default: true, aliases: "-f", desc: "The -f option causes tail to not stop when end of file is reached, but rather to wait for additional data to be appended to the input."
     def log(*extras)

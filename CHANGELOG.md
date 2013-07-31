@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.3.4
+
+### Features
+
+- Added command 'vim' to open a file/folder on a given server using VIM
+
+### Bug Fixes
+
+- Removed hard coded `deploy` user dependency from assets server config
+
 ## v2.3.3
 
 ### Bug Fixes

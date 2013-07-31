@@ -10,6 +10,7 @@ karo db console # Will open MySQL console on the server
 karo console # Will open Rails console on the server
 karo assets pull -e staging # Will sync the dragonfly assets from staging on to the local machine
 karo log -f # Will tail the production log with -f argument
+karo vim app/models/user.rb # Will open the user.rb file on the server using vim for editing
 ```
 
 You can also write your custom commands
@@ -22,17 +23,17 @@ karo client {command} # Will try to find a command from .karo.yml or execute the
 ## Few Assumptions
 
 - You have SSH access to your servers
-- You have the [Capistrano](https://github.com/capistrano/capistrano) deploy directory structure on your server  
-  [deploy_to]  
-  [deploy_to]/releases  
-  [deploy_to]/releases/20080819001122  
-  [deploy_to]/releases/...  
-  [deploy_to]/shared  
-  [deploy_to]/shared/config/database.yml  
-  [deploy_to]/shared/log  
-  [deploy_to]/shared/pids  
-  [deploy_to]/shared/system  
-  [deploy_to]/current -> [deploy_to]/releases/20100819001122  
+- You have the [Capistrano](https://github.com/capistrano/capistrano) deploy directory structure on your server
+  [deploy_to]
+  [deploy_to]/releases
+  [deploy_to]/releases/20080819001122
+  [deploy_to]/releases/...
+  [deploy_to]/shared
+  [deploy_to]/shared/config/database.yml
+  [deploy_to]/shared/log
+  [deploy_to]/shared/pids
+  [deploy_to]/shared/system
+  [deploy_to]/current -> [deploy_to]/releases/20100819001122
 - You are using MySQL as your database server
 - You are using Dragonfly to store your assets
 

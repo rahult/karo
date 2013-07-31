@@ -36,7 +36,7 @@ module Karo
     def config
       configuration = Config.load_configuration(options)
 
-      ap configuration if configuration
+      ap(configuration, indent: 2) if configuration
     end
 
     def self.source_root

@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.3.5
+
+### Bug Fixes
+
+- Removed hard coded `localhost` host dependency from db server config
+
 ## v2.3.4
 
 ### Features

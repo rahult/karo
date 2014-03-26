@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.3.6
+
+### Bug Fixes
+
+- Now mysql server db server config loads proper hostname in sync query instead of just using `localhost` by default
+
 ## v2.3.5
 
 ### Bug Fixes

@@ -87,7 +87,17 @@ module Karo
     end
 
     def drop_and_create_local_database(local_db_config)
-      command = "mysql -v -h #{local_db_config["host"]} -u#{local_db_config["username"]} -p#{local_db_config["password"]} -e 'DROP DATABASE IF EXISTS `#{local_db_config["database"]}`; CREATE DATABASE IF NOT EXISTS `#{local_db_config["database"]}`;'"
+      command = case local_db_config["adapter"]
+      when "mysql2"
+        "mysql -v -h #{local_db_config["host"]} -u#{local_db_config["username"]} -p#{local_db_config["password"]} -e 'DROP DATABASE IF EXISTS `#{local_db_config["database"]}`; CREATE DATABASE IF NOT EXISTS `#{local_db_config["database"]}`;'"
+      when "postgresql"
+        <<-EOS
+          dropdb -h #{local_db_config["host"]} -U #{local_db_config["username"]} --if-exists #{local_db_config["database"]}
+          createdb -h #{local_db_config["host"]} -U #{local_db_config["username"]} #{local_db_config["database"]}
+        EOS
+      else
+        raise Thor::Error, "Please make sure that the database adapter is either mysql2 or postgresql?"
+      end
 
       run_it command, options[:verbose]
     end
@@ -95,7 +105,14 @@ module Karo
     def sync_server_to_local_database(server_db_config, local_db_config)
       ssh = "ssh #{@configuration["user"]}@#{@configuration["host"]}"
 
-      command = "#{ssh} \"mysqldump --opt -C -h #{server_db_config["host"]} -u#{server_db_config["username"]} -p#{server_db_config["password"]} -h#{server_db_config["host"]} #{server_db_config["database"]}\" | mysql -v -h #{local_db_config["host"]} -C -u#{local_db_config["username"]} -p#{local_db_config["password"]} #{local_db_config["database"]}"
+      command = case server_db_config["adapter"]
+      when /mysql|mysql2/
+        "#{ssh} \"mysqldump --opt -C -h #{server_db_config["host"]} -u#{server_db_config["username"]} -p#{server_db_config["password"]} -h#{server_db_config["host"]} #{server_db_config["database"]}\" | mysql -v -h #{local_db_config["host"]} -C -u#{local_db_config["username"]} -p#{local_db_config["password"]} #{local_db_config["database"]}"
+      when "postgresql"
+        "#{ssh} \"export PGPASSWORD='#{server_db_config["password"]}'; pg_dump -Fc -U #{server_db_config["username"]} -h #{server_db_config["host"]} #{server_db_config["database"]}\" | pg_restore -h #{local_db_config["host"]} -U #{local_db_config["username"]} -d #{local_db_config["database"]}"
+      else
+        raise Thor::Error, "Please make sure that the database adapter is either mysql2 or postgresql?"
+      end
 
       run_it command, options[:verbose]
     end

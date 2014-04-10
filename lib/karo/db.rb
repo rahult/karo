@@ -105,14 +105,11 @@ module Karo
     def sync_server_to_local_database(server_db_config, local_db_config)
       ssh = "ssh #{@configuration["user"]}@#{@configuration["host"]}"
 
-      require 'pry'
-      binding.pry
-
       command = case server_db_config["adapter"]
       when /mysql|mysql2/
         "#{ssh} \"mysqldump --opt -C -u#{server_db_config["username"]} -p#{server_db_config["password"]} -h#{server_db_config["host"]} #{server_db_config["database"]}\" | mysql -v -h #{local_db_config["host"]} -C -u#{local_db_config["username"]} -p#{local_db_config["password"]} #{local_db_config["database"]}"
       when "postgresql"
-        "#{ssh} \"pg_dump -U #{server_db_config["username"]} -h #{server_db_config["host"]} -d #{server_db_config["database"]}\" | psql -h #{local_db_config["host"]} -U #{local_db_config["username"]} -d #{local_db_config["database"]} -c"
+        "#{ssh} \"export PGPASSWORD='#{server_db_config["password"]}'; pg_dump -Fc -U #{server_db_config["username"]} -h #{server_db_config["host"]} #{server_db_config["database"]}\" | pg_restore -h #{local_db_config["host"]} -U #{local_db_config["username"]} -d #{local_db_config["database"]}"
       else
         raise Thor::Error, "Please make sure that the database adapter is either mysql2 or postgresql?"
       end

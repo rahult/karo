@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.3.6
+
+### Features
+
+- Added support for pulling postgres databases
+
 ## v2.3.5
 
 ### Bug Fixes

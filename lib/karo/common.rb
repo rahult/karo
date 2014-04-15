@@ -21,7 +21,7 @@ module Karo
 
     def run_it(cmd, verbose=false)
       say cmd, :green if verbose
-      system cmd
+      system cmd unless options[:dryrun]
     end
 
     def git_repo

@@ -19,6 +19,7 @@ module Karo
                   aliases: "-c", desc: "name of the file containing server configuration"
     class_option :environment, aliases: "-e", desc: "server environment", default: "production"
     class_option :verbose, type: :boolean, lazy_default: true, aliases: "-v", desc: "verbose"
+    class_option :dryrun,  type: :boolean, lazy_default: true, aliases: "-d", desc: "dry-run"
 
     desc "cache [search, remove]", "find or clears a specific or all cache from shared/cache directory on the server"
     subcommand "cache", Cache

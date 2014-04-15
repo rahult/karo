@@ -4,6 +4,13 @@
 
 ### Features
 
+- Added support for custom assets path
+- Added support doing a dry-run on any command with --dryrun or -d option
+
+## v2.3.7
+
+### Features
+
 - Added support for pulling postgres databases
 
 ## v2.3.6

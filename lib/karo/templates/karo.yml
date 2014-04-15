@@ -2,6 +2,7 @@ production:
   host: example.com
   user: deploy
   path: /data/app_name
+  assets_path: /data/app_name/shared/system/dragonfly/production
   commands:
     server:
       memory: watch vmstat -sSM

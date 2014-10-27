@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.3.9
+
+### Features
+
+- Updated to thor (0.19.1) and awesome_print (1.2.0)
+- Enabled compression before migrating data from server to localhost
+
+## v2.3.8
+
+### Features
+
+- Added option to store custom assets path and doing dry-runs
+
+### Features
+
+- Added support for custom assets path
+- Added support doing a dry-run on any command with --dryrun or -d option
+
 ## v2.3.7
 
 ### Features

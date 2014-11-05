@@ -155,8 +155,7 @@ module Karo
       configuration = Config.load_configuration(options)
 
       path = File.join(configuration["path"], "current")
-      cmd  = "cd #{path}; export RAILS_ENV=#{options[:environment]}; \
-              export RACK_ENV=#{options[:environment]}; $SHELL"
+      cmd  = "cd #{path}; $SHELL --login"
 
       invoke :server, [cmd]
     end
@@ -166,7 +165,7 @@ module Karo
       configuration = Config.load_configuration(options)
 
       path = File.join(configuration["path"], "current")
-      cmd  = "cd #{path} && bundle exec rails console #{options[:environment]}"
+      cmd  = "cd #{path} && $SHELL --login -c \"bundle exec rails console\""
 
       invoke :server, [cmd]
     end
@@ -176,7 +175,7 @@ module Karo
       configuration = Config.load_configuration(options)
 
       path = File.join(configuration["path"], "current")
-      cmd  = "cd #{path} && export RAILS_ENV=#{options[:environment]} && bundle exec rake #{command}"
+      cmd  = "cd #{path} && $SHELL --login -c \"bundle exec rake #{command}\""
 
       invoke :server, [cmd, extras]
     end

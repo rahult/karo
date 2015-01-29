@@ -4,7 +4,7 @@ require 'karo/common'
 require 'karo/assets'
 require 'karo/cache'
 require 'karo/db'
-require 'ap'
+require 'json'
 
 module Karo
 
@@ -37,7 +37,7 @@ module Karo
     def config
       configuration = Config.load_configuration(options)
 
-      ap(configuration, indent: 2) if configuration
+      puts JSON.pretty_generate(configuration) if configuration
     end
 
     def self.source_root

@@ -25,7 +25,7 @@ module Karo
     end
 
     def git_repo
-      Grit::Repo.new(".")
+      Rugged::Repository.new(".")
     end
 
     def branch_exists?(name)

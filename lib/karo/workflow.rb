@@ -1,6 +1,6 @@
 require 'karo/common'
 require 'thor'
-require 'grit'
+require 'rugged'
 
 module Karo
 

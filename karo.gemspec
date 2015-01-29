@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency  "rake"
   spec.add_development_dependency  "rdoc"
   spec.add_development_dependency  "aruba"
-  spec.add_dependency "awesome_print", "~> 1.2.0"
-  spec.add_dependency "grit", "~> 2.5.0"
-  spec.add_dependency "thor", "~> 0.19"
+
+  spec.add_dependency "rugged",    "~> 0.21"
+  spec.add_dependency "thor",      "~> 0.19"
 end

@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.5.0
+
+### Features
+
+- Switched to [rugged](https://github.com/libgit2/rugged) for git manipulation
+- Removed awesome print as a dependency
+
 ## v2.4.0
 
 ### Bug Fixes

@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.4.0
+
+### Bug Fixes
+
+- Fixed all SSH commands to load server environment before performing a task
+
 ## v2.3.9
 
 ### Features

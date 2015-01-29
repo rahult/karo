@@ -42,7 +42,7 @@ module Karo
       ssh  = "ssh #{configuration["user"]}@#{configuration["host"]}"
       ssh << " -t" if options[:tty]
 
-      command  = "cd #{path} && bundle exec rails dbconsole #{options[:environment]} -p"
+      command  = "cd #{path} && $SHELL --login -c \"bundle exec rails dbconsole -p\""
 
       run_it "#{ssh} '#{command}'", options[:verbose]
     end

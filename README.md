@@ -1,6 +1,5 @@
-# Karo [![Code Climate](https://codeclimate.com/github/rahult/karo.png)](https://codeclimate.com/github/rahult/karo) [![Dependency Status](https://gemnasium.com/rahult/karo.png)](https://gemnasium.com/rahult/karo) [![Gem Version](https://badge.fury.io/rb/karo.png)](http://badge.fury.io/rb/karo)
+# Karo [![Code Climate](https://codeclimate.com/github/rahult/karo.png)](https://codeclimate.com/github/rahult/karo) [![Dependency Status](https://gemnasium.com/rahult/karo.png)](https://gemnasium.com/rahult/karo) [![Gem Version](https://badge.fury.io/rb/karo.png)](http://badge.fury.io/rb/karo) [![Join the chat at https://gitter.im/rahult/karo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rahult/karo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Join the chat at https://gitter.im/rahult/karo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rahult/karo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 **Karo** is a command line companion for a rails application which makes performing routine commands locally or on the server easier.
 

@@ -24,6 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency  "rdoc"
   spec.add_development_dependency  "aruba"
 
-  spec.add_dependency "rugged",    "~> 0.21"
+  # spec.add_dependency "rugged",    "~> 0.21"
   spec.add_dependency "thor",      "~> 0.19"
 end

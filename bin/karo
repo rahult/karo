@@ -5,7 +5,8 @@ require 'karo'
 begin
   Karo::CLI.start(ARGV)
 rescue SystemExit, Interrupt
-  puts "Exiting"
+  STDERR.puts "Exiting"
 rescue Exception => e
-  puts e
+  STDERR.puts "karo: Error: #{e}"
+  return 1
 end

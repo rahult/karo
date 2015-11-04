@@ -22,6 +22,9 @@ module Karo
     def run_it(cmd, verbose=false)
       say cmd, :green if verbose
       system cmd unless options[:dryrun]
+      if $?.exitstatus
+        raise "Non-zero exit code (#{$?.exitstatus}) returned from #{cmd.strip}"
+      end
     end
 
     def git_repo

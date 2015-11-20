@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.5.2
+
+### Features
+
+- Added option to pass environment as `env: production` setting within .karo.yml
+
+## v2.5.1
+
+### Features
+
+- Disabled rugged
+
 ## v2.5.0
 
 ### Features

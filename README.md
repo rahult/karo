@@ -75,6 +75,7 @@ staging:
   host: example.com
   user: deploy
   path: /data/app_name
+  env: staging
   commands:
     server:
       memory: vmstat -sSM

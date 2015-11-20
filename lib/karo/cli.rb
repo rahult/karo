@@ -195,7 +195,7 @@ module Karo
     def log(*extras)
       configuration = Config.load_configuration(options)
 
-      path = File.join(configuration["path"], "shared/log/#{options["environment"]}.log")
+      path = File.join(configuration["path"], "shared/log/#{configuration["env"] || options["environment"]}.log")
 
       cmd = "tail"
       cmd << " -f" if options[:continous]

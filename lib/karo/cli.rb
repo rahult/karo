@@ -17,7 +17,7 @@ module Karo
 
     class_option :config_file, type: :string, default: Config.default_file_name,
                   aliases: "-c", desc: "name of the file containing server configuration"
-    class_option :environment, aliases: "-e", desc: "server environment", default: "production"
+    class_option :environment, aliases: "-e", desc: "server environment", default: "staging"
     class_option :verbose, type: :boolean, lazy_default: true, aliases: "-v", desc: "verbose"
     class_option :dryrun,  type: :boolean, lazy_default: true, aliases: "-d", desc: "dry-run"
 

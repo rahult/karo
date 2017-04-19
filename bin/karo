@@ -8,5 +8,6 @@ rescue SystemExit, Interrupt
   STDERR.puts "Exiting"
 rescue => e
   STDERR.puts "karo: Error: #{e}"
+  STDERR.puts e.backtrace
   exit 1
 end

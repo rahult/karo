@@ -6,7 +6,7 @@ begin
   Karo::CLI.start(ARGV)
 rescue SystemExit, Interrupt
   STDERR.puts "Exiting"
-rescue Exception => e
+rescue => e
   STDERR.puts "karo: Error: #{e}"
   exit 1
 end

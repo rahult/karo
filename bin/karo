@@ -8,5 +8,5 @@ rescue SystemExit, Interrupt
   STDERR.puts "Exiting"
 rescue Exception => e
   STDERR.puts "karo: Error: #{e}"
-  return 1
+  exit 1
 end

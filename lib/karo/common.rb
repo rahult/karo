@@ -12,6 +12,9 @@ module Karo
 
       if commands && commands[namespace] && commands[namespace][command]
         command = commands[namespace][command]
+        command.sub! "{{user}}", configuration["user"]
+        command.sub! "{{host}}", configuration["host"]
+        command.sub! "{{path}}", configuration["path"]
       end
 
       extras = extras.flatten(1).uniq.join(" ").strip

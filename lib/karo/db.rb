@@ -8,7 +8,7 @@ module Karo
     include Karo::Common
 
     method_option :migrate, aliases: "-m", desc: "run migrations after sync", type: :boolean, default: true
-	  desc "pull", "syncs MySQL database from server to localhost"
+	  desc "pull", "syncs MySQL or Postgres database from server to localhost"
 	  def pull
 	    @configuration = Config.load_configuration(options)
 
@@ -59,7 +59,15 @@ module Karo
       local_db_config = YAML.load(File.read('config/database.yml'))
 
       if local_db_config["development"].nil? || local_db_config["development"].empty?
-        raise Thor::Error, "Please make sure MySQL development configuration exists within this file? '#{local_db_config_file}'"
+        raise Thor::Error, "Please make sure development configuration exists within this file? '#{local_db_config_file}'"
+      end
+
+      if local_db_config["development"]["username"].nil?
+        raise Thor::Error, "Error: Please make sure a `username` is configured in your database.yml"
+      end
+
+      if local_db_config["development"]["host"].nil?
+        raise Thor::Error, "Error: Please make sure a `host` is configured in your database.yml (e.g. localhost)"
       end
 
       say "Loading local database configuration", :green
@@ -78,7 +86,7 @@ module Karo
       server_db_config = YAML.load(yaml_without_any_ruby)
 
       if server_db_config[options[:environment]].nil? || server_db_config[options[:environment]].empty?
-        raise Thor::Error, "Please make sure MySQL development configuration exists within this file? '#{server_db_config_file}'"
+        raise Thor::Error, "Please make sure database config for this environment exists within this file? '#{server_db_config_file}'"
       end
 
       say "Loading #{options[:environment]} server database configuration", :green

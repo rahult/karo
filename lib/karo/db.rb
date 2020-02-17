@@ -7,7 +7,7 @@ module Karo
 
     include Karo::Common
 
-    method_option :migrate, aliases: "-m", desc: "run migrations after sync", default: true
+    method_option :migrate, aliases: "-m", desc: "run migrations after sync", type: :boolean, default: true
 	  desc "pull", "syncs MySQL database from server to localhost"
 	  def pull
 	    @configuration = Config.load_configuration(options)
